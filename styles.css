@@ -416,7 +416,7 @@ a{ color: inherit; }
   .print-label{
     width:100%; max-width:30cm; height:auto; aspect-ratio:3 / 2;
     box-sizing:border-box;
-    padding: 1.25cm 1.5cm;
+    padding: 1.1cm 1.3cm;
     display:flex; flex-direction:column;
     page-break-after: always;
     break-after: page;
@@ -426,13 +426,14 @@ a{ color: inherit; }
   .print-label:last-child{ page-break-after: auto; break-after: auto; }
 
   .print-label .p-product{
-    font-family: var(--font-display); font-weight:700; font-size: clamp(44px, 6.9vw, 78px); margin-bottom:auto; line-height:1.05;
+    font-family: var(--font-display); font-weight:700; font-size: clamp(38px, 5.8vw, 70px); margin-bottom:auto; line-height:1.05;
     overflow-wrap:anywhere;
   }
-  .print-label .p-rows{ display:flex; flex-direction:column; gap: 18px; margin: 26px 0; }
-  .print-label .p-row{ display:flex; justify-content:flex-start; gap: .65em; font-family: var(--font-mono); font-size: clamp(24px, 3.7vw, 42px); line-height:1.1; }
+  .print-label .p-rows{ display:flex; flex-direction:column; gap: 2.2vw; margin: 3vw 0; }
+  .print-label .p-row{ display:grid; grid-template-columns: auto 1fr auto; align-items:baseline; column-gap: 1em; font-family: var(--font-mono); font-size: clamp(38px, 5.8vw, 70px); line-height:1.05; }
   .print-label .p-row .k{ font-weight:700; }
-  .print-label .p-row .v{ white-space:nowrap; }
-  .print-label .p-custom{ font-family: var(--font-mono); font-size: clamp(18px, 2.65vw, 30px); line-height:1.15; display:flex; justify-content:space-between; color:#333; }
-  .print-label .p-name{ margin-top:auto; padding-top:20px; border-top:3px solid #222; font-family: var(--font-mono); font-weight:700; font-size: clamp(26px, 3.9vw, 44px); line-height:1.1; overflow-wrap:anywhere; }
+  .print-label .p-row .p-time{ white-space:nowrap; text-align:left; }
+  .print-label .p-row .p-date{ white-space:nowrap; text-align:right; }
+  .print-label .p-custom{ font-family: var(--font-mono); font-size: clamp(38px, 5.8vw, 70px); line-height:1.05; display:flex; justify-content:space-between; color:#333; }
+  .print-label .p-name{ margin-top:auto; padding-top:20px; border-top:3px solid #222; font-family: var(--font-mono); font-weight:700; font-size: clamp(38px, 5.8vw, 70px); line-height:1.05; overflow-wrap:anywhere; }
 }

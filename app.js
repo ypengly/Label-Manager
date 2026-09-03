@@ -380,9 +380,9 @@ function labelInnerHTML(label, forPrint){
   const tpl = templateFor(label.templateId);
   const rowsHTML = `
     <div class="${forPrint?'p-rows':'label-rows'}">
-      <div class="${forPrint?'p-row':'label-row'}"><span class="k">M:</span><span class="v">${esc(label.mTime)} &nbsp; ${esc(fmtDMY(label.mDate))}</span></div>
-      <div class="${forPrint?'p-row':'label-row'}"><span class="k">R:</span><span class="v">${esc(label.rTime)} &nbsp; ${esc(fmtDMY(label.rDate))}</span></div>
-      <div class="${forPrint?'p-row':'label-row'}"><span class="k">D:</span><span class="v">${esc(label.dTime)} &nbsp; ${esc(fmtDMY(label.dDate))}</span></div>
+      <div class="${forPrint?'p-row':'label-row'}"><span class="k">M:</span><span class="${forPrint?'p-time':'v'}">${esc(label.mTime)}</span><span class="${forPrint?'p-date':'v'}">${esc(fmtDMY(label.mDate))}</span></div>
+      <div class="${forPrint?'p-row':'label-row'}"><span class="k">R:</span><span class="${forPrint?'p-time':'v'}">${esc(label.rTime)}</span><span class="${forPrint?'p-date':'v'}">${esc(fmtDMY(label.rDate))}</span></div>
+      <div class="${forPrint?'p-row':'label-row'}"><span class="k">D:</span><span class="${forPrint?'p-time':'v'}">${esc(label.dTime)}</span><span class="${forPrint?'p-date':'v'}">${esc(fmtDMY(label.dDate))}</span></div>
     </div>`;
   const customHTML = (label.customFields||[]).filter(f => f.show !== false && f.name).map(f =>
     `<div class="${forPrint?'p-custom':'label-custom'}"><span>${esc(f.name)}</span><span>${esc(f.value||'')}</span></div>`
