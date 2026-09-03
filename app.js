@@ -354,8 +354,13 @@ function saveDraft(silent){
   const now = new Date().toISOString();
   if(App.ui.editingLabelId){
     const existing = byId(App.data.labels, App.ui.editingLabelId);
-    Object.assign(existing, d, { updatedAt: now });
-  } else {
+    if(existing){
+      Object.assign(existing, d, { updatedAt: now });
+    } else {
+      App.ui.editingLabelId = null;
+    }
+  }
+  if(!App.ui.editingLabelId){
     const rec = { ...d, id: uid('lbl'), createdAt: now, updatedAt: now };
     App.data.labels.unshift(rec);
     App.ui.editingLabelId = rec.id;
@@ -368,6 +373,8 @@ function saveDraft(silent){
    PRINT
    ========================================================================= */
 function templateFor(id){ return byId(App.data.templates, id) || App.data.templates[0]; }
+
+let printInProgress = false;
 
 function labelInnerHTML(label, forPrint){
   const tpl = templateFor(label.templateId);
@@ -388,13 +395,30 @@ function labelInnerHTML(label, forPrint){
 }
 
 function doPrintLabels(labels){
-  if(!labels.length){ toast('Nothing to print', 'err'); return; }
+  const printableLabels = (labels||[]).filter(Boolean);
+  if(!printableLabels.length){ toast('Nothing to print', 'err'); return; }
+  if(printInProgress){ return; }
   const root = document.getElementById('printRoot');
-  root.innerHTML = labels.map(l => `<div class="print-label">${labelInnerHTML(l, true)}</div>`).join('');
-  // allow layout to settle, then invoke the browser print dialog
-  requestAnimationFrame(() => setTimeout(() => window.print(), 30));
+  printInProgress = true;
+  root.innerHTML = printableLabels.map(l => `<div class="print-label">${labelInnerHTML(l, true)}</div>`).join('');
+  document.body.classList.add('is-printing');
+
+  // Fonts and layout must be ready before print preview snapshots the page.
+  const waitForLayout = async () => {
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    window.print();
+    // Some browser/driver combinations do not dispatch afterprint on cancel.
+    setTimeout(() => { if(printInProgress) finishPrint(); }, 1500);
+  };
+  waitForLayout().catch(() => window.print());
 }
-window.addEventListener('afterprint', () => { document.getElementById('printRoot').innerHTML = ''; });
+function finishPrint(){
+  document.getElementById('printRoot').innerHTML = '';
+  document.body.classList.remove('is-printing');
+  printInProgress = false;
+}
+window.addEventListener('afterprint', finishPrint);
 
 /* =========================================================================
    EXCEL IMPORT / EXPORT (SheetJS)
@@ -929,7 +953,7 @@ function Settings(){
         <div class="field"><label>Orientation</label><input class="input" value="Landscape" disabled></div>
         <div class="field"><label>Margins</label><input class="input" value="0" disabled></div>
         <div class="field"><label>Scale</label><input class="input" value="100%" disabled></div>
-        <p class="hint">The printed size is fixed by the print stylesheet (@page 30cm 20cm). In your browser's print dialog, set <b>Scale → 100% / Actual size</b> and disable "Fit to page" so nothing gets shrunk.</p>
+        <p class="hint">The label keeps its 3:2 proportion and uses up to 30 × 20 cm. It scales down to fit smaller paper such as Letter. Set the print dialog to <b>100% / Actual size</b>.</p>
       </div>
 
       <div class="card">

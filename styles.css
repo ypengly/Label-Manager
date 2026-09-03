@@ -402,21 +402,21 @@ a{ color: inherit; }
 #printRoot{ display:none; }
 
 @media print{
-  @page{ size: 30cm 20cm; margin: 0; }
+  @page{ size: auto; margin: 0; }
 
-  html, body{ background:#fff !important; }
+  html, body{ width:100%; min-height:100%; background:#fff !important; }
   body *{ visibility: hidden !important; }
 
   #printRoot, #printRoot *{ visibility: visible !important; }
   #printRoot{
     display:block !important;
-    position:absolute; left:0; top:0; margin:0; padding:0;
+    position:absolute; left:0; top:0; width:100%; max-width:30cm; margin:0; padding:0;
   }
 
   .print-label{
-    width:30cm; height:20cm;
+    width:100%; max-width:30cm; height:auto; aspect-ratio:3 / 2;
     box-sizing:border-box;
-    padding: 1.1cm 1.3cm;
+    padding: 1.25cm 1.5cm;
     display:flex; flex-direction:column;
     page-break-after: always;
     break-after: page;
@@ -426,11 +426,13 @@ a{ color: inherit; }
   .print-label:last-child{ page-break-after: auto; break-after: auto; }
 
   .print-label .p-product{
-    font-family: var(--font-display); font-weight:700; font-size: 54px; margin-bottom:auto; line-height:1.05;
+    font-family: var(--font-display); font-weight:700; font-size: clamp(44px, 6.9vw, 78px); margin-bottom:auto; line-height:1.05;
+    overflow-wrap:anywhere;
   }
-  .print-label .p-rows{ display:flex; flex-direction:column; gap: 14px; margin: 22px 0; }
-  .print-label .p-row{ display:flex; justify-content:space-between; font-family: var(--font-mono); font-size: 28px; }
+  .print-label .p-rows{ display:flex; flex-direction:column; gap: 18px; margin: 26px 0; }
+  .print-label .p-row{ display:flex; justify-content:flex-start; gap: .65em; font-family: var(--font-mono); font-size: clamp(24px, 3.7vw, 42px); line-height:1.1; }
   .print-label .p-row .k{ font-weight:700; }
-  .print-label .p-custom{ font-family: var(--font-mono); font-size:18px; display:flex; justify-content:space-between; color:#333; }
-  .print-label .p-name{ margin-top:auto; padding-top:16px; border-top:2px solid #222; font-family: var(--font-mono); font-weight:700; font-size:30px; }
+  .print-label .p-row .v{ white-space:nowrap; }
+  .print-label .p-custom{ font-family: var(--font-mono); font-size: clamp(18px, 2.65vw, 30px); line-height:1.15; display:flex; justify-content:space-between; color:#333; }
+  .print-label .p-name{ margin-top:auto; padding-top:20px; border-top:3px solid #222; font-family: var(--font-mono); font-weight:700; font-size: clamp(26px, 3.9vw, 44px); line-height:1.1; overflow-wrap:anywhere; }
 }
